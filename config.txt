@@ -1,0 +1,8 @@
+# Default configuration (you can edit this)
+WIDTH=20
+HEIGHT=16
+
+ENTRY= 0,14
+EXIT=9, 14
+OUTPUT_FILE=maze.txt
+PERFECT=false
