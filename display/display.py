@@ -67,7 +67,6 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
                 content = path_c + " • " + RESET
             # --- Rendering the large '42' blocks ---
             elif hasattr(cell, 'forbidden') and cell.forbidden:
-                # الرمز '█' كيعمر البلاصة كاملة وكيبان كبيير
                 content = special_c + "███" + RESET 
             # ---------------------------------------
             else:
@@ -78,7 +77,6 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
             if cell.right:
                 line += wall_c + "┃" + RESET
             else:
-                # إذا كان ممر ديال 42 مفتوح من الجنب، كنلونوا حتى الفراغ باش يبان متصل
                 if hasattr(cell, 'forbidden') and cell.forbidden:
                     line += special_c + " " + RESET
                 else:
