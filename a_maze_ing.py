@@ -16,6 +16,8 @@ def key_check(key: str) -> bool:
 
 
 def parse_value(key: str, value: str) -> Any:
+    '''Parses the configuration file'''
+
     if key == "WIDTH" or key == "HEIGHT":
         num = int(value)
         if key == "WIDTH" and num < 10:
@@ -137,19 +139,16 @@ if __name__ == "__main__":
         print("You must use: python3 a_maze_ing.py config.txt")
         sys.exit()
 
-    config = read_config(sys.argv[1])
-    print("Passed configuration\n")
+    while True:
+        config = read_config(sys.argv[1])
+        maze = MazeGenerator(config)
+        maze.generate()
+        solution = path(maze)
 
-    maze = MazeGenerator(config)
-    print("Created maze object\n")
-
-    maze.generate()
-    print("created maze itself\n")
-
-    solution = path(maze)
-    print("Solved the maze")
-
-    hex_file(maze, solution, config.output_file)
-    print("here should be the file")
+        hex_file(maze, solution, config.output_file)
     
-    menu_loop(maze)
+        action = menu_loop(maze)
+        if action == "regenerate":
+            continue
+        if action == "quit":
+            break

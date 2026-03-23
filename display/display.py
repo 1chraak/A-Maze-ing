@@ -3,7 +3,7 @@ Module for displaying the maze and handling user interaction.
 Enhanced with Full Block rendering for the '42' pattern.
 """
 
-import sys
+import os
 from mazegen.mazegen import MazeGenerator
 from utils.pathfinder import path as get_path
 
@@ -29,6 +29,7 @@ def get_path_coords(maze: MazeGenerator, path_directions: list[str]) -> set[tupl
         elif move == "W": x -= 1
         coords.add((x, y))
     return coords
+
 
 def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set | None = None) -> None:
     """Render the maze with large solid blocks for the '42' pattern."""
@@ -104,21 +105,29 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
     # Bottom border
     print(wall_c + "┗" + "━━━┻" * (w - 1) + "━━━┛" + RESET)
 
-def menu_loop(maze: MazeGenerator) -> None:
+
+def menu_loop(maze: MazeGenerator) -> str:
     """Interactive loop."""
     global theme_index
-    show_path = False
+    show_path = True
+
     while True:
-        print("\n=== MAZE VIEW ===")
+        os.system("clear")
+        print("\n=== MAZE VIEW ===")    
         render_maze(maze, show_path)
-        print("\n[p] Show/Hide Path | [a] Animate | [c] Theme | [q] Quit")
+        print("\n[r] regenerate | [p] Show/Hide Path | [a] Animate | [c] Theme | [q] Quit")
         try:
             choice = input("> ").strip().lower()
         except (EOFError, KeyboardInterrupt):
             break
-        if choice == "p": show_path = not show_path
+        if choice == "p":
+            show_path = not show_path
         elif choice == "a":
             from display.animation import animate_solution
             animate_solution(maze, get_path(maze))
-        elif choice == "c": theme_index = (theme_index + 1) % len(THEMES)
-        elif choice == "q": break
+        elif choice == "c":
+            theme_index = (theme_index + 1) % len(THEMES)
+        elif choice == "q":
+            return "quit"
+        elif choice == "r":
+            return "regenerate"

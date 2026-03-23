@@ -18,7 +18,7 @@ The project strictly follows the mandatory requirements defined in the subject, 
 
 # Features
 
-- Random maze generation using Depth-First Search (DFS)
+- Random maze generation using "Hunt and kill" algorithm (DFS)
 - Support for both Perfect and Imperfect maze types
 - Shortest pathfinding algorithm implementation
 - Hexadecimal file output for maze architecture
@@ -39,6 +39,7 @@ python3 a_maze_ing.py config.txt
 
 Once the maze is displayed, you can use these keys:
 
+- **r** : Create a new maze
 - **p** : Toggle the shortest path (Show/Hide)
 - **a** : Start the pathfinding animation
 - **c** : Cycle through available color themes
@@ -54,3 +55,111 @@ To install the required development tools (flake8, mypy):
 
 ```bash
 make install
+```
+
+# Running the program
+To generate and render the maze:
+```bash
+make run
+```
+
+
+# Maze Generation Algorithm
+
+This project uses the **Hunt-and-Kill** maze generation algorithm.
+
+## How Hunt-and-Kill Works
+
+The algorithm operates in two phases.
+
+### 1. Kill phase
+
+- Start from a random cell
+- Randomly walk to unvisited neighbors
+- Carve passages as you go
+- Continue until no unvisited neighbors remain
+
+### 2. Hunt phase
+
+- Scan the grid for an unvisited cell
+- Find one adjacent to a visited cell
+- Connect them
+- Resume the kill phase from this new cell
+
+This process repeats until all cells are visited.
+
+---
+
+# Why Hunt-and-Kill
+
+This algorithm was chosen because:
+
+- Simple to implement
+- Produces natural-looking mazes
+- Guarantees full connectivity
+- Works well with rectangular grids
+- Easy to extend for perfect/non-perfect mazes
+- Uses little memory
+- Does not require recursion
+
+Compared to DFS, Hunt-and-Kill avoids deep recursion and is easier to control.
+
+---
+
+# Reusable Parts of the Code
+
+Several components of the project were designed to be reusable.
+
+## Maze Data Structure
+
+The maze grid representation is independent of:
+
+- generation algorithm
+- solver
+- display
+
+This allows different algorithms to reuse the same structure.
+
+---
+
+## Generator Module
+
+The Hunt-and-Kill generator only depends on:
+
+- maze width and height
+- wall carving functions
+
+It can be replaced by:
+
+- DFS generator
+- Prim's algorithm
+- Kruskal's algorithm
+
+without modifying the rest of the project.
+
+---
+
+## Pathfinding Module
+
+The solver works on any maze:
+
+- generated maze
+- loaded maze
+- external maze
+
+It only requires:
+
+- grid structure
+- entry position
+- exit position
+
+---
+
+## Display Module
+
+The ASCII renderer:
+
+- reads from output file
+- independent from generator
+- independent from solver
+- reusable for any compatible maze file
