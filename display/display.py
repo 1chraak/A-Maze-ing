@@ -11,30 +11,53 @@ from utils.pathfinder import path as get_path
 RESET = "\033[0m"
 
 THEMES = [
-    {"wall": "\033[97m", "path": "\033[92m", "special": "\033[95m"}, # White / Green / Magenta
-    {"wall": "\033[94m", "path": "\033[93m", "special": "\033[91m"}, # Blue / Yellow / Red
-    {"wall": "\033[96m", "path": "\033[95m", "special": "\033[93m"}, # Cyan / Magenta / Yellow
+    {
+        "wall": "\033[97m",
+        "path": "\033[92m",
+        "special": "\033[95m",
+    },  # White / Green / Magenta
+    {
+        "wall": "\033[94m",
+        "path": "\033[93m",
+        "special": "\033[91m",
+    },  # Blue / Yellow / Red
+    {
+        "wall": "\033[96m",
+        "path": "\033[95m",
+        "special": "\033[93m",
+    },  # Cyan / Magenta / Yellow
 ]
 
 theme_index = 0
 
-def get_path_coords(maze: MazeGenerator, path_directions: list[str]) -> set[tuple[int, int]]:
+
+def get_path_coords(
+    maze: MazeGenerator,
+    path_directions: list[str]
+) -> set[tuple[int, int]]:
     """Convert directions into (x, y) coordinates."""
     x, y = maze.entry
     coords = {(x, y)}
     for move in path_directions:
-        if move == "N": y -= 1
-        elif move == "S": y += 1
-        elif move == "E": x += 1
-        elif move == "W": x -= 1
+        if move == "N":
+            y -= 1
+        elif move == "S":
+            y += 1
+        elif move == "E":
+            x += 1
+        elif move == "W":
+            x -= 1
         coords.add((x, y))
     return coords
 
 
-def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set | None = None) -> None:
+def render_maze(
+    maze: MazeGenerator,
+    show_path: bool = False,
+    custom_coords: set | None = None
+) -> None:
     """Render the maze with large solid blocks for the '42' pattern."""
-    global theme_index
-    theme = THEMES[theme_index]
+    theme = THEMES[theme_index]  # removed unused global
     wall_c = theme["wall"]
     path_c = theme["path"]
     special_c = theme["special"]
@@ -42,7 +65,7 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
     w = maze.width
     h = maze.height
     grid = maze.maze
-    
+
     path_coords = set()
     if custom_coords is not None:
         path_coords = custom_coords
@@ -65,10 +88,8 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
                 content = path_c + " E " + RESET
             elif (x, y) in path_coords:
                 content = path_c + " • " + RESET
-            # --- Rendering the large '42' blocks ---
             elif hasattr(cell, 'forbidden') and cell.forbidden:
-                content = special_c + "███" + RESET 
-            # ---------------------------------------
+                content = special_c + "███" + RESET
             else:
                 content = "   "
 
@@ -89,11 +110,7 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
             line = wall_c + "┣"
             for x in range(w):
                 cell = grid[y * w + x]
-                if cell.down:
-                    line += "━━━"
-                else:
-                    line += "   "
-
+                line += "━━━" if cell.down else "   "
                 if x < w - 1:
                     line += "╋"
                 else:
@@ -106,26 +123,32 @@ def render_maze(maze: MazeGenerator, show_path: bool = False, custom_coords: set
 
 def menu_loop(maze: MazeGenerator) -> str:
     """Interactive loop."""
-    global theme_index
     show_path = True
 
     while True:
         os.system("clear")
-        print("\n=== MAZE VIEW ===")    
+        print("\n=== MAZE VIEW ===")
         render_maze(maze, show_path)
-        print("\n[r] regenerate | [p] Show/Hide Path | [a] Animate | [c] Theme | [q] Quit")
+        print(
+            "\n[r] regenerate | [p] Show/Hide Path | "
+            "[a] Animate | [c] Theme | [q] Quit"
+        )
         try:
             choice = input("> ").strip().lower()
         except (EOFError, KeyboardInterrupt):
             break
+
         if choice == "p":
             show_path = not show_path
         elif choice == "a":
             from display.animation import animate_solution
             animate_solution(maze, get_path(maze))
         elif choice == "c":
+            global theme_index
             theme_index = (theme_index + 1) % len(THEMES)
         elif choice == "q":
             return "quit"
         elif choice == "r":
             return "regenerate"
+
+    return ""

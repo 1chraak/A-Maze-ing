@@ -2,10 +2,10 @@ PYTHON = python3
 MAIN = a_maze_ing.py
 CONFIG = config.txt
 
-.PHONY: install run debug clean lint
+.PHONY: install run debug clean lint lint-strict build
 
 install:
-	$(PYTHON) -m pip install --break-system-packages flake8 mypy
+	$(PYTHON) -m pip install -r requirements.txt
 
 run:
 	$(PYTHON) $(MAIN) $(CONFIG)
@@ -17,10 +17,21 @@ clean:
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
 	@find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	@find . -name "*.pyc" -delete
-	@rm -rf dist
-	@rm -rf *.egg-info
+	@rm -rf dist build *.egg-info
 	@rm -f maze.txt
 
 lint:
-	flake8 *.py
-	mypy *.py --warn-return-any --warn-unused-ignores --ignore-missing-imports
+	flake8 .
+	mypy . \
+		--warn-return-any \
+		--warn-unused-ignores \
+		--ignore-missing-imports \
+		--disallow-untyped-defs \
+		--check-untyped-defs
+
+lint-strict:
+	flake8 .
+	mypy . --strict
+
+build:
+	$(PYTHON) -m build

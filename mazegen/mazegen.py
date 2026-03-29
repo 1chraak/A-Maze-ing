@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 import random
 import sys
 
@@ -12,6 +12,7 @@ class Config:
     exit: tuple[int, int]
     output_file: str
     perfect: bool
+    seed: Optional[int]
 
 
 class Cell:
@@ -105,7 +106,7 @@ class MazeGenerator:
         self.exit = configuration.exit
         self.perfect = configuration.perfect
         self.maze: list[Cell] = []
-
+        self.seed = configuration.seed
     '''Placing the 42 logo at the center by marking those cells as forbidden'''
     def shape_42(self, grid: List[Cell],
                  width: int, height: int) -> List[Cell]:
@@ -161,6 +162,8 @@ class MazeGenerator:
                 cell2.down = False
 
     def generate(self) -> None:
+        if self.seed:
+            random.seed(self.seed)
         grid = []
         for i in range(self.height):
             for j in range(self.width):

@@ -5,11 +5,17 @@ import os
 from mazegen.mazegen import MazeGenerator
 from display.display import render_maze
 
+
 def clear_screen() -> None:
     """Clear the terminal screen to create an animation effect."""
     os.system("cls" if os.name == "nt" else "clear")
 
-def animate_solution(maze: MazeGenerator, path_directions: list[str], delay: float = 0.05) -> None:
+
+def animate_solution(
+    maze: MazeGenerator,
+    path_directions: list[str],
+    delay: float = 0.05
+) -> None:
     """
     Animate the solution path step by step.
     """
@@ -18,7 +24,10 @@ def animate_solution(maze: MazeGenerator, path_directions: list[str], delay: flo
 
     # Display the very first frame of the animation
     clear_screen()
-    render_maze(maze, custom_coords=current_coords)
+    render_maze(
+        maze,
+        custom_coords=current_coords
+    )
     time.sleep(delay)
 
     # Add the path points one by one
@@ -36,5 +45,8 @@ def animate_solution(maze: MazeGenerator, path_directions: list[str], delay: flo
 
         # Clear the screen, redraw with the new point, and wait
         clear_screen()
-        render_maze(maze, custom_coords=current_coords)
+        render_maze(
+            maze,
+            custom_coords=current_coords
+        )
         time.sleep(delay)
