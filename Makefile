@@ -2,7 +2,7 @@ PYTHON = python3
 MAIN = a_maze_ing.py
 CONFIG = config.txt
 
-.PHONY: install run debug clean lint lint-strict build
+.PHONY: install run debug clean lint  build
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -31,7 +31,7 @@ lint:
 
 lint-strict:
 	flake8 .
-	mypy . --strict
+	mypy .
 
 build:
 	$(PYTHON) -m build

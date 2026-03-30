@@ -28,10 +28,14 @@ def parse_value(key: str, value: str) -> Any:
 
     if key == "WIDTH" or key == "HEIGHT":
         num = int(value)
-        if key == "WIDTH" and num < 10:
-            raise ValueError
+        if num <=0:
+            raise ValueError(f"{num} is not valid value for {key}")
+        if num > 60:
+            raise ValueError("WIDTH OR HEIGHT CANNOT BE > 60 ")
+        if key == "WIDTH" and num < 10: 
+            print("width < 10 maze cannot have 42 flag")
         if key == "HEIGHT" and num < 8:
-            raise ValueError
+            print("height < 8 maze cannot have 42 flag")
         return num
 
     if key == "ENTRY" or key == "EXIT":
@@ -167,7 +171,7 @@ def read_config(file: str) -> Config:
         )
 
     except ValueError as e:
-        print(f"ERRPR [{e}]")
+        print(e)
         sys.exit()
     except KeyboardInterrupt:
         print("programme terminate!")

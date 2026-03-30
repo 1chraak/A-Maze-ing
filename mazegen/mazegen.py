@@ -168,8 +168,8 @@ class MazeGenerator:
         for i in range(self.height):
             for j in range(self.width):
                 grid.append(Cell(j, i))
-
-        grid = self.shape_42(grid, self.width, self.height)
+        if self.height > 8 and self.width > 10:
+            grid = self.shape_42(grid, self.width, self.height)
 
         '''The hunt and kill algorithm implementation'''
         while True:
