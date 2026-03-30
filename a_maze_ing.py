@@ -28,11 +28,11 @@ def parse_value(key: str, value: str) -> Any:
 
     if key == "WIDTH" or key == "HEIGHT":
         num = int(value)
-        if num <=0:
+        if num <= 0:
             raise ValueError(f"{num} is not valid value for {key}")
         if num > 60:
             raise ValueError("WIDTH OR HEIGHT CANNOT BE > 60 ")
-        if key == "WIDTH" and num < 10: 
+        if key == "WIDTH" and num < 10:
             print("width < 10 maze cannot have 42 flag")
         if key == "HEIGHT" and num < 8:
             print("height < 8 maze cannot have 42 flag")
